@@ -40,7 +40,8 @@ OR use Live Server in VS Code (Right-click > Open with Live Server)
 
 Deployment
 
-You can deploy this project using:
+You can deploy this project using:![Screenshot 2025-03-30 185502](https://github.com/user-attachments/assets/82c862e1-ee8c-402f-b73a-bec7586ad22f)
+
 
 Netlify (Drag and drop the folder into Netlify dashboard)
 
