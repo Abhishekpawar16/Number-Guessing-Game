@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .navbar {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            font-size: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">Number Guessing Game</div>
+    <div class="container">
+        <h2>Guess the Number (1-10)</h2>
+        <input type="number" id="guess" min="1" max="10" placeholder="Enter your guess">
+        <button onclick="checkGuess()">Submit</button>
+        <p id="message"></p>
+        <button onclick="restartGame()" style="display: none;">Play Again</button>
+    </div>
+
+    <script>
+        let randomNumber = Math.floor(Math.random() * 10) + 1;
+        let message = document.getElementById("message");
+
+        function checkGuess() {
+            let guess = parseInt(document.getElementById("guess").value);
+            if (isNaN(guess) || guess < 1 || guess > 10) {
+                message.innerText = "Please enter a number between 1 and 10.";
+                return;
+            }
+            if (guess < randomNumber) {
+                message.innerText = "Guess higher!";
+            } else if (guess > randomNumber) {
+                message.innerText = "Guess lower!";
+            } else {
+                message.innerText = "You guessed it right!";
+                document.querySelector("button[onclick='restartGame()']").style.display = "inline";
+            }
+        }
+
+        function restartGame() {
+            randomNumber = Math.floor(Math.random() * 10) + 1;
+            message.innerText = "";
+            document.getElementById("guess").value = "";
+            document.querySelector("button[onclick='restartGame()']").style.display = "none";
+        }
+    </script>
+</body>
+</html>
