@@ -1,86 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Number Guessing Game</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            text-align: center;
-        }
-        .navbar {
-            background-color: #333;
-            color: white;
-            padding: 15px;
-            font-size: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        input, button {
-            margin: 10px;
-            padding: 10px;
-            font-size: 16px;
-        }
-        button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Modern Number Guessing Game</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    video.bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(0.6);
+    }
+
+    .game-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      color: #fff;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translate(-50%, -60%); }
+      to   { opacity: 1; transform: translate(-50%, -50%); }
+    }
+
+    input[type="number"] {
+      padding: 12px;
+      width: 80px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: none;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 5px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .guess-btn {
+      background: #4ade80;
+      color: #000;
+    }
+
+    .reset-btn {
+      background: #f87171;
+      color: #000;
+    }
+
+    .toggle-mode {
+      background: #3b82f6;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .score, .high-score, .message {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .dark-mode .game-container {
+      background: rgba(0, 0, 0, 0.5);
+    }
+  </style>
 </head>
-<body>
-    <div class="navbar">Number Guessing Game</div>
-    <div class="container">
-        <h2>Guess the Number (1-10)</h2>
-        <input type="number" id="guess" min="1" max="10" placeholder="Enter your guess">
-        <button onclick="checkGuess()">Submit</button>
-        <p id="message"></p>
-        <button onclick="restartGame()" style="display: none;">Play Again</button>
+<body class="light-mode">
+
+  <!-- 🔥 Background Video -->
+  <video autoplay loop muted class="bg-video">
+    <source src="C:\Users\abhis\Downloads\554ee10b052cd036ba2d01bb9f7c85db_720w.mp4" type="video/webm">
+    Your browser does not support HTML5 video.
+  </video>
+
+  <!-- 🧊 Game UI -->
+  <div class="game-container">
+    <h1>🎯 Guess the Number</h1>
+    <input type="number" id="guessInput" placeholder="1-100" min="1" max="100" />
+    <div>
+      <button class="guess-btn" onclick="checkGuess()">Guess</button>
+      <button class="reset-btn" onclick="resetGame()">Reset</button>
     </div>
+    <div class="score" id="score">Attempts: 0</div>
+    <div class="high-score" id="highScore">Best Score: -</div>
+    <div class="message" id="message"></div>
+    <button class="toggle-mode" onclick="toggleMode()">🌗 Toggle Dark Mode</button>
+  </div>
 
-    <script>
-        let randomNumber = Math.floor(Math.random() * 10) + 1;
-        let message = document.getElementById("message");
+  <!-- 🎧 Sound Effects -->
+  <audio id="correctSound" src="C:\Users\abhis\Downloads\correct.mp3"></audio>
+  <audio id="wrongSound" src="C:\Users\abhis\Downloads\beep_beep.mp3"></audio>
+  <audio id="resetSound" src="C:\Users\abhis\Downloads\super_mario_world_corr.mp3"></audio>
 
-        function checkGuess() {
-            let guess = parseInt(document.getElementById("guess").value);
-            if (isNaN(guess) || guess < 1 || guess > 10) {
-                message.innerText = "Please enter a number between 1 and 10.";
-                return;
-            }
-            if (guess < randomNumber) {
-                message.innerText = "Guess higher!";
-            } else if (guess > randomNumber) {
-                message.innerText = "Guess lower!";
-            } else {
-                message.innerText = "You guessed it right!";
-                document.querySelector("button[onclick='restartGame()']").style.display = "inline";
-            }
+  <!-- 🧠 Script -->
+  <script>
+    let secretNumber = Math.floor(Math.random() * 100) + 1;
+    let attempts = 0;
+    let bestScore = localStorage.getItem("bestScore") || null;
+
+    document.getElementById('highScore').textContent =
+      bestScore ? `Best Score: ${bestScore}` : `Best Score: -`;
+
+    function checkGuess() {
+      const guess = Number(document.getElementById('guessInput').value);
+      const message = document.getElementById('message');
+      const score = document.getElementById('score');
+      const highScore = document.getElementById('highScore');
+
+      if (!guess || guess < 1 || guess > 100) {
+        message.textContent = "🚫 Enter a number between 1 and 100!";
+        message.style.color = "#fbbf24";
+        return;
+      }
+
+      attempts++;
+      score.textContent = "Attempts: " + attempts;
+
+      if (guess === secretNumber) {
+        message.textContent = "🎉 Correct! You guessed it!";
+        message.style.color = "#34d399";
+        document.getElementById('correctSound').play();
+
+        if (!bestScore || attempts < bestScore) {
+          bestScore = attempts;
+          localStorage.setItem("bestScore", bestScore);
+          highScore.textContent = `Best Score: ${bestScore}`;
         }
+      } else {
+        message.textContent = guess < secretNumber ? "🔼 Too low!" : "🔽 Too high!";
+        message.style.color = "#facc15";
+        document.getElementById('wrongSound').play();
+      }
+    }
 
-        function restartGame() {
-            randomNumber = Math.floor(Math.random() * 10) + 1;
-            message.innerText = "";
-            document.getElementById("guess").value = "";
-            document.querySelector("button[onclick='restartGame()']").style.display = "none";
-        }
-    </script>
+    function resetGame() {
+      secretNumber = Math.floor(Math.random() * 100) + 1;
+      attempts = 0;
+      document.getElementById('guessInput').value = '';
+      document.getElementById('score').textContent = "Attempts: 0";
+      document.getElementById('message').textContent = "";
+      document.getElementById('resetSound').play();
+    }
+
+    function toggleMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+  </script>
 </body>
 </html>
