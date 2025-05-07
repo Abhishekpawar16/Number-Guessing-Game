@@ -27,7 +27,7 @@ Clone the Repository
 bash
 Copy
 Edit
-git clone https://github.com/yourusername/number-guessing-game.git
+git clone [https://github.com/yourusername/number-guessing-game.git](https://github.com/Abhishekpawar16/Number-Guessing-Game)
 Navigate to the Project Folder
 
 bash
